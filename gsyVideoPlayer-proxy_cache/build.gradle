@@ -1,0 +1,56 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+
+android {
+
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api ('com.aliyun.ams:alicloud-android-httpdns:1.2.6@aar') {
+        transitive true
+    }
+
+    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+}
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            repository(url: 'http://nexus.yyuehd.com:8081/repository/android-release/') {
+                //authentication(userName: 'admin', password: 'NLtOfjofz4duLUbm')
+            }
+            pom.project {
+                version '1.3.39' //版本名称
+                artifactId 'yyhd-videocache'  //和前面网站上填写的一样
+                groupId 'com.yyhd.joke'  //和前面网站上填写的一样
+                packaging 'aar' //填写aar
+                description '文件缓存大小改成云配置' //更新描述
+            }
+        }
+    }
+}
+//apply from: './bintray.gradle'
